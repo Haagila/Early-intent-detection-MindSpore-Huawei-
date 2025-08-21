@@ -42,34 +42,10 @@ Las señales electromiográficas presentan:
 
 ### 1. **CNN para Extracción de Características Locales**
 
-**Operación de convolución 1D:**
-$$
-y[t] = \sum_{k=0}^{K-1} w[k] \cdot x[t + k] + b
-$$
-
-Donde:
-- $w[k]$: kernels aprendibles (filtros)
-- $x[t]$: señal EMG de entrada
-- $b$: término de bias
-
 **Ventajas para señales EMG:**
 - **Invarianza temporal**: Detecta patrones independientemente de su posición
 - **Extracción jerárquica**: Capas profundas capturan features complejas
 - **Reducción de parámetros**: Sharing de pesos mediante kernels
-
-### 2. **LSTM para Modelado Temporal**
-
-**Ecuaciones fundamentales LSTM:**
-$$
-\begin{aligned}
-f_t &= \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \\
-i_t &= \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \\
-\tilde{C}_t &= \tanh(W_C \cdot [h_{t-1}, x_t] + b_C) \\
-C_t &= f_t \odot C_{t-1} + i_t \odot \tilde{C}_t \\
-o_t &= \sigma(W_o \cdot [h_{t-1}, x_t] + b_o) \\
-h_t &= o_t \odot \tanh(C_t)
-\end{aligned}
-$$
 
 **Por qué LSTM para EMG:**
 - **Memoria a largo plazo**: Captura dependencias temporales extendidas
