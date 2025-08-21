@@ -383,7 +383,3 @@ El modelo de la **Ventana 20** demuestra un mejor desempeño global y mayor esta
     *   Aplicar **Data Augmentation** específico para hacerla más distintiva.
     *   Evaluar el ajuste del **umbral de clasificación** para esta clase, sacrificando algo de *recall* por más *precisión*.
 
-### 3. Próximos Pasos
-*   **Focalizar el re-entrenamiento** en las clases problemáticas (10 y 0), posiblemente utilizando **class weights** para penalizar más sus errores.
-*   Validar las mejoras con una nueva **matriz de confusión** y **curvas ROC**, prestando especial atención a la tasa de error entre las Clases 0 y 10.
-*   Monitorizar el desempeño de las Clases 5 y 6, que mostraron una ligera regresión en la V40.
