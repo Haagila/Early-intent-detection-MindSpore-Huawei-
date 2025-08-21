@@ -313,3 +313,77 @@ Ahora revisamos la matriz de confusión generada por un modelo de clasificación
   - 37 instancias confundidas con la **Clase 12**.
   - 28 instancias confundidas con la **Clase 9**.
 - **Conclusión:** La identificación de la Clase 10 es el punto más débil del modelo. Existe una confusión abrumadora con la Clase 0, lo que indica que el modelo no ha aprendido a distinguir entre estas dos categorías.
+
+
+# Análisis Comparativo de Modelos - Ventana 20 vs. Ventana 40
+
+![Grafica ROC-AUC ventana 40](RocAuc40.png) 
+
+![Grafica ROC-AUC ventana 20](RocAuc20.png)
+
+El modelo de la **Ventana 20** demuestra un mejor desempeño global y mayor estabilidad que el de la Ventana 40. Si bien ambos son robustos, la Ventana 40 presenta una regresión significativa en la clasificación de la **Clase 10**, confirmada por ambas métricas. Se recomienda utilizar la Ventana 20 como base y focalizar los esfuerzos de mejora en las clases 0 y 10.
+
+---
+
+## 📊 Tabla Comparativa de Métricas ROC-AUC
+
+| Clase | AUC V20 | AUC V40 | Diferencia (∆) | Tendencia y Comentario |
+| :---- | :-----: | :-----: | :------------: | :--------------------- |
+| **0** | 0.85 | 0.87 | **+0.02** | Leve mejora, pero sigue siendo un punto débil. |
+| **1** | 0.95 | 0.94 | -0.01 | Excelente y estable. |
+| **2** | 0.95 | 0.93 | -0.02 | Excelente y estable. |
+| **3** | 0.97 | 0.97 | 0.00 | Excepcional y consistente (Confirmado por MC). |
+| **4** | 0.93 | 0.94 | +0.01 | Excelente y estable. |
+| **5** | 0.97 | 0.94 | **-0.03** | Ligera regresión, pero se mantiene excelente. |
+| **6** | 0.93 | 0.90 | **-0.03** | Regresión notable. Revisar en próximas iteraciones. |
+| **7** | 0.95 | 0.97 | **+0.02** | Mejora a nivel excepcional. |
+| **8** | 0.95 | 0.94 | -0.01 | Excelente y estable (Confirmado por MC). |
+| **9** | 0.90 | 0.89 | -0.01 | Bueno y estable. |
+| **10** | 0.88 | 0.80 | **-0.08** | **Regresión crítica. El principal problema.** |
+| **11** | 0.91 | 0.89 | -0.02 | Bueno y estable. |
+| **12** | 0.97 | 0.95 | -0.02 | Excepcional y estable. |
+| **📊 Promedio** | **~0.93** | **~0.91** | **-0.02** | **La V20 tiene un poder de discriminación global superior.** |
+
+**Leyenda:** MC = Matriz de Confusión
+
+---
+
+## Hallazgos Interesantes (ROC-AUC + Matriz de Confusión)
+
+1.  **Problema Crítico Confirmado: Clase 10**
+    *   **ROC-AUC:** Es la clase con el AUC más bajo en ambas ventanas, con una **caída severa (-0.08) en la V40**.
+    *   **Matriz de Confusión:** La matriz de la V20 mostró que es la clase con mayor confusión, siendo predicha incorrectamente como Clase 0 en la gran mayoría de los casos.
+    *   **Conclusión:** El modelo consistentemente no logra aprender los features discriminativos de la Clase 10. Este es el foco principal.
+
+2.  **Punto Débil Secundario: Clase 0**
+    *   **ROC-AUC:** AUC bajo pero estable (~0.86). Tiene margen de mejora.
+    *   **Matriz de Confusión:** La matriz mostró que, si bien el modelo puede distinguirla (AUC decente), **se equivoca de manera específica y masiva** (principalmente con las clases 1, 10 y 12).
+    *   **Conclusión:** Es necesario investigar las similitudes visuales entre la Clase 0 y las clases 1, 10 y 12.
+
+3.  **Puntos Fuertes Confirmados: Clases 3 y 8**
+    *   **ROC-AUC:** AUC excepcional y estable (0.97 y ~0.95).
+    *   **Matriz de Confusión:** Ambas mostraron una diagonal fuerte con altos aciertos.
+    *   **Conclusión:** El modelo identifica estas clases de manera excelente y consistente.
+
+---
+
+## Recomendaciones
+
+### 1. Decisión Estratégica del Modelo
+*   **Utilizar la Ventana 20 como modelo base.** Su desempeño global es superior y más estable. La regresión en la Clase 10 en la V40 es inaceptable.
+
+### 2. Acciones Inmediatas para Mejora
+*   **Investigar el Dataset de la Clase 10:**
+    *   ¿Hay suficientes ejemplos?
+    *   ¿La calidad de las imágenes es buena y consistente?
+    *   **Análisis Visual:** Comparar imágenes de la Clase 10 con las de la Clase 0 para identificar similitudes que confunden al modelo (ej: fondo, color, iluminación, ángulo).
+
+*   **Acciones para la Clase 0:**
+    *   Realizar el mismo **análisis visual** comparativo con las Clases 1 y 12.
+    *   Aplicar **Data Augmentation** específico para hacerla más distintiva.
+    *   Evaluar el ajuste del **umbral de clasificación** para esta clase, sacrificando algo de *recall* por más *precisión*.
+
+### 3. Próximos Pasos
+*   **Focalizar el re-entrenamiento** en las clases problemáticas (10 y 0), posiblemente utilizando **class weights** para penalizar más sus errores.
+*   Validar las mejoras con una nueva **matriz de confusión** y **curvas ROC**, prestando especial atención a la tasa de error entre las Clases 0 y 10.
+*   Monitorizar el desempeño de las Clases 5 y 6, que mostraron una ligera regresión en la V40.
