@@ -212,7 +212,9 @@ Las ventanas de 20 muestras muestran:
 
 ## Descripción General
 
-Ahora revisamos la matriz de confusión generada por un modelo de clasificación para un problema de 13 clases (etiquetas 0 a 12). ![Matriz de Confusion para la ventana 40](matriz40.png) ![Matriz de Confusion para la ventana 20](matriz20.png)
+Ahora revisamos la matriz de confusión generada por un modelo de clasificación para un problema de 13 clases (etiquetas 0 a 12). ![Matriz de Confusion para la ventana 40](matriz40.png) 
+
+![Matriz de Confusion para la ventana 20](matriz20.png)
 
 - **Filas (Eje Vertical):** Representan la **etiqueta real** (la clase verdadera a la que pertenece cada instancia).
 - **Columnas (Eje Horizontal):** Representan la **etiqueta predicha** (la clase que el modelo propuso).
